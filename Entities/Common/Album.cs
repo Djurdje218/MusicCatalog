@@ -24,5 +24,7 @@ namespace MusicCatalog.Entities.Common
         {
             AlbumTracks.Add(track);
         }
+
+
     }
 }

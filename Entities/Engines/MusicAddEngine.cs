@@ -14,13 +14,13 @@ namespace MusicCatalog.Entities.Engines
     {
         private List<Artist> artists;
         private List<Genre> genres;
-        private List<Playlist> playlist;
+        private List<Playlist> playlists;
 
         public MusicAddEngine(List<Artist> artists, List<Genre> genres, List<Playlist> playlist)
         {
             this.artists = artists;
             this.genres = genres;
-            this.playlist = playlist;
+            this.playlists = playlist;
         }
 
         // Method to add a new artist
@@ -44,6 +44,28 @@ namespace MusicCatalog.Entities.Engines
             else
             {
                 Console.WriteLine("Artist name cannot be empty.");
+            }
+        }
+        public void AddNewPlaylist()
+        {
+            Console.Write("Enter Playlist name: ");
+            string name = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                if (playlists.Exists(p => p.Name == name))
+                {
+                    Console.WriteLine($"Playlist '{name}' already exists.");
+                }
+                else
+                {
+                    playlists.Add(new Playlist(name));
+                    Console.WriteLine($"Playlist '{name}' added successfully.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Playlist name cannot be empty.");
             }
         }
 
@@ -154,6 +176,57 @@ namespace MusicCatalog.Entities.Engines
                 Console.WriteLine("Invalid genre choice.");
                 return null;
             }
+        }
+
+        public void AddTrackToPlaylist()
+        {
+            // Ask for the playlist name
+            Console.Write("Enter playlist name: ");
+            string playlistName = Console.ReadLine();
+            var playlist = playlists.FirstOrDefault(p => p.Name.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
+
+            if (playlist == null)
+            {
+                Console.WriteLine($"Playlist '{playlistName}' not found.");
+                return;
+            }
+
+            // Ask for the artist name
+            Console.Write("Enter artist name: ");
+            string artistName = Console.ReadLine();
+            var artist = artists.FirstOrDefault(a => a.Name.Equals(artistName, StringComparison.OrdinalIgnoreCase));
+
+            if (artist == null)
+            {
+                Console.WriteLine($"Artist '{artistName}' not found.");
+                return;
+            }
+
+            // Ask for the album name
+            Console.Write("Enter album name: ");
+            string albumName = Console.ReadLine();
+            var album = artist.Albums.FirstOrDefault(a => a.Title.Equals(albumName, StringComparison.OrdinalIgnoreCase));
+
+            if (album == null)
+            {
+                Console.WriteLine($"Album '{albumName}' not found for artist '{artistName}'.");
+                return;
+            }
+
+            // Ask for the track name
+            Console.Write("Enter track title: ");
+            string trackTitle = Console.ReadLine();
+            var track = album.AlbumTracks.FirstOrDefault(t => t.Title.Equals(trackTitle, StringComparison.OrdinalIgnoreCase));
+
+            if (track == null)
+            {
+                Console.WriteLine($"Track '{trackTitle}' not found in album '{albumName}'.");
+                return;
+            }
+
+            // Add the track to the playlist
+            playlist.AddTrack(track);
+            Console.WriteLine($"Track '{trackTitle}' by {artistName} added to playlist '{playlistName}'.");
         }
 
 

@@ -11,13 +11,13 @@ namespace MusicCatalog.Entities.Engines
     {
         private List<Artist> artists;
         private List<Genre> genres;
-        private List<Playlist> playlist;
+        private List<Playlist> playlists;
 
         public MusicSearchEngine(List<Artist> artists, List<Genre> genres, List <Playlist> playlists)
         {
             this.artists = artists;
             this.genres = genres;
-            this.playlist = playlists;
+            this.playlists = playlists;
         }
 
         // Поиск артистов по имени
@@ -139,6 +139,29 @@ namespace MusicCatalog.Entities.Engines
                 Console.WriteLine("No tracks found.");
             }
         }
+public void DisplayTracksInPlaylist(string playlistTitle)
+{
+    var playlist = playlists.FirstOrDefault(p => p.Name.Equals(playlistTitle, StringComparison.OrdinalIgnoreCase));
+
+    if (playlist == null)
+    {
+        Console.WriteLine($"Playlist '{playlistTitle}' not found.");
+        return;
+    }
+
+    if (playlist.Tracks.Count == 0)
+    {
+        Console.WriteLine($"No tracks found in playlist '{playlistTitle}'.");
+    }
+    else
+    {
+        Console.WriteLine($"Tracks in playlist '{playlistTitle}':");
+        foreach (var track in playlist.Tracks)
+        {
+            Console.WriteLine($"- {track.Title}");
+        }
+    }
+}
         public void DisplayAllTracks()
         {
             if (artists.Count == 0)

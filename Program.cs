@@ -18,7 +18,7 @@ class Program
 
         while (true)
         {
-            Console.Clear();
+           //11 Console.Clear();
             Console.WriteLine("Welcome to the Music Catalog!");
             Console.WriteLine("1. Add Artist");
             Console.WriteLine("2. Add Album");
@@ -32,6 +32,10 @@ class Program
             Console.WriteLine("10. Display all Artists");
             Console.WriteLine("11. Display all Tracks");
             Console.WriteLine("12. Display all Genres");
+            Console.WriteLine("13. Add Playlist");
+            Console.WriteLine("14. Display Playlist Tracks");
+            Console.WriteLine("15. Add Track in Playlist");
+
             Console.WriteLine("0. Exit");
             Console.Write("Choose an option: ");
             var option = Console.ReadLine();
@@ -92,6 +96,17 @@ class Program
                 case "12":
                     searchEngine.DisplayAllGenres();
                     break;
+                case "13":
+                    addEngine.AddNewPlaylist();
+                    break;
+                case "14":
+                    Console.Write("Enter playlist name:");
+                    string playlistTitle = Console.ReadLine();
+                    searchEngine.DisplayTracksInPlaylist(playlistTitle);
+                    break;
+                case "15":
+                    addEngine.AddTrackToPlaylist();
+                    break;
                 default:
                     Console.WriteLine("Invalid option, please try again.");
                     break;
@@ -102,7 +117,6 @@ class Program
         }
     }
 
-    // Pre-populate the catalog with some data
     static void SeedData()
     {
         Genre pop = new Genre("Pop");
