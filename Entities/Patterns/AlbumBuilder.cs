@@ -39,6 +39,8 @@ namespace MusicCatalog.Entities.Patterns
             return this;
         }
 
+     
+
         public Album Build()
         {
             Album album = new Album(title, releaseYear, genre);

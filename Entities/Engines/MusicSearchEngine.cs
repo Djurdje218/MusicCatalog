@@ -20,14 +20,12 @@ namespace MusicCatalog.Entities.Engines
             this.playlists = playlists;
         }
 
-        // Поиск артистов по имени
         public List<Artist> SearchArtistsByName(string name)
         {
             return artists
                 .Where(artist => artist.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
-        // Поиск альбомов по жанру
         public List<Album> SearchAlbumsByGenre(Genre genre)
         {
             return artists
@@ -36,7 +34,6 @@ namespace MusicCatalog.Entities.Engines
                 .ToList();
         }
 
-        // Поиск альбомов по году выпуска
         public List<Album> SearchAlbumsByReleaseYear(string releaseYear)
         {
             return artists
@@ -53,7 +50,6 @@ namespace MusicCatalog.Entities.Engines
                           .ToList();
         }
 
-        // Поиск треков по жанру
         public List<Track> SearchTracksByGenre(string genreName)
         {
             var genre = genres.FirstOrDefault(g => g.genreName.Equals(genreName, StringComparison.OrdinalIgnoreCase));
@@ -66,8 +62,6 @@ namespace MusicCatalog.Entities.Engines
             }
             return [];
         }
-
-        // Поиск альбомов по названию альбома
         public List<Album> SearchAlbumsByTitle(string title)
         {
             return artists
@@ -75,7 +69,6 @@ namespace MusicCatalog.Entities.Engines
                 .Where(album => album.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
-
         public void DisplayArtists(List<Artist> foundArtists)
         {
             if (foundArtists.Count > 0)
@@ -139,29 +132,29 @@ namespace MusicCatalog.Entities.Engines
                 Console.WriteLine("No tracks found.");
             }
         }
-public void DisplayTracksInPlaylist(string playlistTitle)
-{
-    var playlist = playlists.FirstOrDefault(p => p.Name.Equals(playlistTitle, StringComparison.OrdinalIgnoreCase));
-
-    if (playlist == null)
-    {
-        Console.WriteLine($"Playlist '{playlistTitle}' not found.");
-        return;
-    }
-
-    if (playlist.Tracks.Count == 0)
-    {
-        Console.WriteLine($"No tracks found in playlist '{playlistTitle}'.");
-    }
-    else
-    {
-        Console.WriteLine($"Tracks in playlist '{playlistTitle}':");
-        foreach (var track in playlist.Tracks)
+        public void DisplayTracksInPlaylist(string playlistTitle)
         {
-            Console.WriteLine($"- {track.Title}");
+            var playlist = playlists.FirstOrDefault(p => p.Name.Equals(playlistTitle, StringComparison.OrdinalIgnoreCase));
+
+            if (playlist == null)
+            {
+                Console.WriteLine($"Playlist '{playlistTitle}' not found.");
+                return;
+            }
+
+            if (playlist.Tracks.Count == 0)
+            {
+                Console.WriteLine($"No tracks found in playlist '{playlistTitle}'.");
+            }
+            else
+            {
+                Console.WriteLine($"Tracks in playlist '{playlistTitle}':");
+                foreach (var track in playlist.Tracks)
+                {
+                    Console.WriteLine($"- {track.Title}");
+                }
+            }
         }
-    }
-}
         public void DisplayAllTracks()
         {
             if (artists.Count == 0)
@@ -197,7 +190,21 @@ public void DisplayTracksInPlaylist(string playlistTitle)
                 }
             }
         }
-
+        public void DisplayAllPlaylists()
+        {
+            if (playlists.Count > 0)
+            {
+                Console.WriteLine($"{playlists.Count} playlists found in catalog\n");
+                foreach(var playlist in playlists)
+                {
+                    playlist.DisplayTracks();
+                }
+            }
+            else
+            {
+                Console.WriteLine("No playlists found\n");
+            }
+        }
     }
 }
 

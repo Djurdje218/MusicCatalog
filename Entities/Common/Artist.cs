@@ -15,10 +15,15 @@ namespace MusicCatalog.Entities.Common
         {
             this.Name = name;
         }
-
         public void AddAlbum(Album album)
         {
             Albums.Add( album );
+        }
+
+
+        public void RemoveAlbum(Album album)
+        {
+            Albums.Remove( album );
         }
     }
 }

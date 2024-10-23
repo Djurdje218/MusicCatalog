@@ -9,21 +9,25 @@ namespace MusicCatalog.Entities.Engines
     using MusicCatalog.Entities.Common;
     using System;
     using System.Collections.Generic;
+    using MusicCatalog.Entities.Patterns;
 
     class MusicAddEngine
     {
         private List<Artist> artists;
         private List<Genre> genres;
         private List<Playlist> playlists;
+        private MusicFactory factory;
+        private AlbumBuilder albumBuilder;
 
         public MusicAddEngine(List<Artist> artists, List<Genre> genres, List<Playlist> playlist)
         {
             this.artists = artists;
             this.genres = genres;
             this.playlists = playlist;
+            this.factory = new MusicFactory();
+            this.albumBuilder = new AlbumBuilder();
         }
 
-        // Method to add a new artist
         public void AddNewArtist()
         {
             Console.Write("Enter artist name: ");
@@ -68,8 +72,6 @@ namespace MusicCatalog.Entities.Engines
                 Console.WriteLine("Playlist name cannot be empty.");
             }
         }
-
-        // Method to add a new album
         public void AddNewAlbum()
         {
             Console.Write("Enter artist name: ");
@@ -97,7 +99,7 @@ namespace MusicCatalog.Entities.Engines
             }
         }
 
-        // Method to add a new track
+        // Method add a new track
         public void AddNewTrack()
         {
             Console.Write("Enter artist name: ");
@@ -106,6 +108,7 @@ namespace MusicCatalog.Entities.Engines
             if (artist == null)
             {
                 Console.WriteLine($"Artist '{artistName}' not found.");
+                Console.WriteLine("Add artist and Album first, then add track");
                 return;
             }
 
@@ -115,6 +118,7 @@ namespace MusicCatalog.Entities.Engines
             if (album == null)
             {
                 Console.WriteLine($"Album '{albumTitle}' not found for artist '{artistName}'.");
+                Console.WriteLine("Add Album first, then add Track");
                 return;
             }
 
@@ -133,8 +137,6 @@ namespace MusicCatalog.Entities.Engines
                 Console.WriteLine($"Track '{trackTitle}' added to album '{albumTitle}'.");
             }
         }
-
-        // Method to add a new genre
         public void AddNewGenre()
         {
             Console.Write("Enter genre name: ");
@@ -158,7 +160,7 @@ namespace MusicCatalog.Entities.Engines
             }
         }
 
-        // Helper method to choose genre from the existing list
+        // Helper method 
         private Genre ChooseGenre()
         {
             Console.WriteLine("Choose genre:");
@@ -174,13 +176,15 @@ namespace MusicCatalog.Entities.Engines
             else
             {
                 Console.WriteLine("Invalid genre choice.");
+                Console.WriteLine("Add a new genre or choose from existing list");
+
                 return null;
             }
         }
 
         public void AddTrackToPlaylist()
         {
-            // Ask for the playlist name
+            // Ask for playlist name
             Console.Write("Enter playlist name: ");
             string playlistName = Console.ReadLine();
             var playlist = playlists.FirstOrDefault(p => p.Name.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
@@ -191,7 +195,7 @@ namespace MusicCatalog.Entities.Engines
                 return;
             }
 
-            // Ask for the artist name
+            // Ask for artist name
             Console.Write("Enter artist name: ");
             string artistName = Console.ReadLine();
             var artist = artists.FirstOrDefault(a => a.Name.Equals(artistName, StringComparison.OrdinalIgnoreCase));
@@ -202,7 +206,7 @@ namespace MusicCatalog.Entities.Engines
                 return;
             }
 
-            // Ask for the album name
+            // Ask for album name
             Console.Write("Enter album name: ");
             string albumName = Console.ReadLine();
             var album = artist.Albums.FirstOrDefault(a => a.Title.Equals(albumName, StringComparison.OrdinalIgnoreCase));
@@ -224,7 +228,7 @@ namespace MusicCatalog.Entities.Engines
                 return;
             }
 
-            // Add the track to the playlist
+            // Add track to playlist
             playlist.AddTrack(track);
             Console.WriteLine($"Track '{trackTitle}' by {artistName} added to playlist '{playlistName}'.");
         }

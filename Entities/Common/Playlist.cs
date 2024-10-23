@@ -41,5 +41,13 @@ namespace MusicCatalog.Entities.Common
                 }
             }
         }
+
+        public void AddAlbum(Album album)
+        {
+            foreach(var track in album.AlbumTracks)
+            {
+                this.Tracks.Add(track);
+            }
+        }
     }
 }

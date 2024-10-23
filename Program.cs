@@ -1,5 +1,6 @@
 ﻿using MusicCatalog.Entities.Common;
 using MusicCatalog.Entities.Engines;
+using MusicCatalog.Entities.Patterns;
 using System;
 using System.Collections.Generic;
 
@@ -11,32 +12,33 @@ class Program
 
     static void Main(string[] args)
     {
-        SeedData();  // Pre-populate the catalog with some data for testing
+        Cataloge();  // Fill the catalog with some data for testing
 
-        MusicAddEngine addEngine = new MusicAddEngine(artists, genres,playlists);
-        MusicSearchEngine searchEngine = new MusicSearchEngine(artists, genres,playlists);
+        MusicAddEngine addEngine = new MusicAddEngine(artists, genres, playlists);
+        MusicSearchEngine searchEngine = new MusicSearchEngine(artists, genres, playlists);
 
         while (true)
         {
-           //11 Console.Clear();
+            Console.Clear();
             Console.WriteLine("Welcome to the Music Catalog!");
-            Console.WriteLine("1. Add Artist");
-            Console.WriteLine("2. Add Album");
-            Console.WriteLine("3. Add Track");
-            Console.WriteLine("4. Add Genre");
-            Console.WriteLine("5. Search Artists by Name");
-            Console.WriteLine("6. Search Albums by Title");
-            Console.WriteLine("7. Search Tracks by Title");
-            Console.WriteLine("8. Search Tracks by Genre");
-            Console.WriteLine("9. Search Albums by Release Year");
-            Console.WriteLine("10. Display all Artists");
-            Console.WriteLine("11. Display all Tracks");
-            Console.WriteLine("12. Display all Genres");
-            Console.WriteLine("13. Add Playlist");
-            Console.WriteLine("14. Display Playlist Tracks");
-            Console.WriteLine("15. Add Track in Playlist");
+            Console.WriteLine("1.    Add Artist");
+            Console.WriteLine("2.    Add Album");
+            Console.WriteLine("3.    Add Track");
+            Console.WriteLine("4.    Add Genre");
+            Console.WriteLine("5.    Search Artists by Name");
+            Console.WriteLine("6.    Search Albums by Title");
+            Console.WriteLine("7.    Search Tracks by Title");
+            Console.WriteLine("8.    Search Tracks by Genre");
+            Console.WriteLine("9.    Search Albums by Release Year");
+            Console.WriteLine("10.   Display all Artists");
+            Console.WriteLine("11.   Display all Tracks");
+            Console.WriteLine("12.   Display all Genres");
+            Console.WriteLine("13.   Add Playlist");
+            Console.WriteLine("14.   Display Playlist Tracks");
+            Console.WriteLine("15.   Add Track in Playlist");
+            Console.WriteLine("16.   Display all Playlists");
 
-            Console.WriteLine("0. Exit");
+            Console.WriteLine("0.    Exit");
             Console.Write("Choose an option: ");
             var option = Console.ReadLine();
             Console.WriteLine("\n");
@@ -107,6 +109,9 @@ class Program
                 case "15":
                     addEngine.AddTrackToPlaylist();
                     break;
+                case "16":
+                    searchEngine.DisplayAllPlaylists();
+                    break;
                 default:
                     Console.WriteLine("Invalid option, please try again.");
                     break;
@@ -117,26 +122,58 @@ class Program
         }
     }
 
-    static void SeedData()
+    static void Cataloge()
     {
-        Genre pop = new Genre("Pop");
-        Genre rock = new Genre("Rock");
+        MusicFactory factory = new MusicFactory();
+
+        Genre pop = factory.CreateGenre("Pop");
+        Genre rock = factory.CreateGenre("Rock");
+        Genre jazz = factory.CreateGenre("Jazz");
+
         genres.Add(pop);
         genres.Add(rock);
+        genres.Add(jazz);
 
-        Artist artist1 = new Artist("Artist 1");
-        Album album1 = new Album("Album 1", "2020", pop);
-        album1.AlbumTracks.Add(new Track("Track 1", "3:45", pop));
+        Artist artist1 = factory.CreateArtist("Artist 1");
+        Artist artist2 = factory.CreateArtist("Artist 2");
+
+        // Build album for artist1
+
+        AlbumBuilder builder1 = new AlbumBuilder();
+        Album album1 = builder1
+                .SetTitle("My POP Album Title")
+                .SetReleaseYear("2024")
+                .SetGenre(pop)
+                .AddTrack(new Track("Track 5", "3:45", pop))
+                .AddTrack(new Track("Track 6", "4:15", pop))
+                .Build();
+
         artist1.Albums.Add(album1);
 
-        Artist artist2 = new Artist("Artist 2");
-        Album album2 = new Album("Album 2", "2021", rock);
-        album2.AlbumTracks.Add(new Track("Track 2", "4:15", rock));
+        // Build album for artist2
+        AlbumBuilder builder2 = new AlbumBuilder();
+        Album album2 = builder2
+        .SetTitle("My ROCK Album Title")
+        .SetReleaseYear("2024")
+        .SetGenre(rock)
+        .AddTrack(new Track("Track 7", "3:45", rock))
+        .AddTrack(new Track("Track 8", "4:15", rock))
+        .Build();
+
         artist2.Albums.Add(album2);
 
+        // Add artists to the list
         artists.Add(artist1);
         artists.Add(artist2);
+
+        // Create a playlist and add albums
+        Playlist playlist1 = factory.CreatePlaylist("My Playlist");
+        playlist1.AddAlbum(album1);
+        playlist1.AddAlbum(album2);
+
+        playlists.Add(playlist1);
     }
-}
+
+} 
 
 
